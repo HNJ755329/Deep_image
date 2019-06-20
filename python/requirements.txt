@@ -1,0 +1,13 @@
+python=3.6
+Django=2.0.10
+django-static-md5url
+tensorflow-gpu
+uwsgi
+PyMySQL
+cudf=0.7
+cudatoolkit=10.0
+pylint
+opencv-python
+Pillow
+tensorflow
+keras
