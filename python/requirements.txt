@@ -1,6 +1,7 @@
-Django
+Django==2.1
 django-static-md5url
-django_webtest
+django-webtest
+IPython
 tensorflow-gpu
 uwsgi
 PyMySQL
