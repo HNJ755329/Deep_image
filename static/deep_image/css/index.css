@@ -1,9 +1,30 @@
-.layername{
+.graph{
+  margin: 0 auto;
+}
+
+.form{
+  margin: 0 auto;
+}
+
+.layer{
+  margin: 0 auto;
   display: block;
   clear: both;
 }
 
-.layerimage{
+.layerimages{
+  display: block;
+  clear: both;
+  margin-top:1em;
+}
+
+img.layerimage{
+  margin: 1px;
+  float: left;
+  border: 1px solid black;
+}
+
+.altshow{
   display: block;
   clear: both;
 }
