@@ -1,0 +1,44 @@
+/*
+[for = "id_image"] {
+   color: red; 
+}
+*/
+
+.upload_image{
+  margin: 0 auto;
+}
+
+.loading{
+  margin: 0 auto;
+}
+
+.graph{
+  margin: 0 auto;
+}
+
+.form{
+  margin: 0 auto;
+}
+
+.layer{
+  margin: 0 auto;
+  display: block;
+  clear: both;
+}
+
+.layerimages{
+  display: block;
+  clear: both;
+  margin-top:1em;
+}
+
+img.layerimage{
+  margin: 1px;
+  float: left;
+  border: 1px solid black;
+}
+
+.altshow{
+  display: block;
+  clear: both;
+}

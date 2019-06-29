@@ -1,0 +1,195 @@
+{% load static %}
+{% load md5url %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{% block title %}How CNN Model Works{% endblock title %}</title>
+    <link href= "{% md5url 'deep_image/css/index.css' %}" rel="stylesheet" type="text/css">
+    <!--<link href="{% md5url 'deep_image/vendor/bootstrap/css/bootstrap.css' %}" rel="stylesheet" type="text/css">-->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <script>
+      $(function(){
+        var IMAGE = IMAGE || {};
+        // form の中身をうまくいじれないからjavascriptでしかたなくlabelにclass追加。
+        $('label').addClass('btn btn-default')
+
+        $("form#submit_model").submit( function(event) {
+          event.preventDefault();
+          var form = $(this);
+          var formData = new FormData(this);
+          IMAGE.model = formData.get('tfkerasModel');
+          console.log(...formData.entries());
+          $("#tensorboard").html("<img class='upload_image center-block' src=" + "{% static 'deep_image/image/gif-load.gif' %}" + ">");
+          $("#References").html("<img class='upload_image center-block' src=" + "{% static 'deep_image/image/gif-load.gif' %}" + ">");
+          $("#cnn_layers").html("<img class='upload_image center-block' src=" + "{% static 'deep_image/image/gif-load.gif' %}" + ">");
+          $.ajax({
+            url: form.prop("action"),
+            method: form.prop("method"),
+            data: formData,
+            cache:false,
+            contentType: false,
+            processData: false,
+            timeout: 100000,
+            dataType: 'json',
+            })
+            .done( function(data) {
+              console.log(data);
+              $("span#label_tensorboard").html(data.model_name);
+              $("#tensorboard").html(data.graph);
+              $("#References").html(data.ref);
+              $("#cnn_layers").html(data.contents);
+              console.log('sucess');
+            })
+            .fail(function(data){
+              $("#tensorboard").html("Fail");
+              $("#References").html("Fail");
+              $("#cnn_layers").html("Fail");
+              console.log('Fail');
+            })
+          return false;
+        });
+
+        $("form#submit_image").submit( function(event) {
+          event.preventDefault();
+          var form = $(this);
+          var formData = new FormData(this);
+          formData.append('model',IMAGE.model);
+          console.log(...formData.entries());
+          $("#uploaded_image").html("<img class='upload_image center-block' src=" + "{% static 'deep_image/image/gif-load.gif' %}" + ">");
+          $.ajax({
+            url: form.prop("action"),
+            method: form.prop("method"),
+            data: formData,
+            cache:false,
+            contentType: false,
+            processData: false,
+            timeout: 100000,
+            dataType: 'json',
+            })
+            .done( function(data) {
+              // alert(data.url);
+              console.log(data);
+              IMAGE.url = data.url
+              $("#uploaded_image").html(
+                "<img class='img-responsive center-block' witdh='840' src=" + IMAGE.url + ">");
+              console.log('sucess');
+            })
+            .fail(function(data){
+              $("#uploaded_image").html("Fail")
+              // console.log(data);
+              console.log('fail');
+            })
+          return false;
+        });
+        // ajaxで読み込まれたあとに存在するものを指定するとき。
+        // $('.layername')だと最初の読み込み時点で存在しないので、以下のような書き方になる。
+        $(document).on('click','.layername', function(event){
+          var layername = $(this);
+          var layer = layername.parent();
+          var layerid = layer.attr('id');
+          // layername.css('color','blue');
+          var postData = {
+            'url': IMAGE.url,
+            'model': IMAGE.model,
+            'layerid': layerid,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+            };
+          console.log(postData);
+          layer.find('.loading').html("<img class='upload_image center-block' src=" + "{% static 'deep_image/image/gif-load-well.gif' %}" + ">");
+          $.ajax({
+            url: "{% url 'deep_layer' %}",
+            data: postData,
+            method: 'POST',
+            dataType: 'json',
+            timeout: 100000,
+            })
+            .done( function(data) {
+              console.log(data);
+              if(data.output instanceof Array){
+                layer.find('.layerimages').text(data.output);
+              } else {
+                layer.find('.layerimages').append(data.output);
+              }
+              console.log('sucess');
+            })
+            .fail(function(data){
+              console.log(data);
+              layer.find('.layerimages').html('FAIL');
+              console.log('fail');            
+            })
+            .always(function(){
+              layer.find('.loading').empty();
+            })
+         });
+
+        $(document).on('click','.layerimage',function(){
+          var layerimage = $(this);
+          var layerimages = layerimage.parent();
+          var layer = layerimages.parent();
+          layer.find('.altshow').text(layerimage.attr('alt'));
+        });
+
+        $(document).on('change', ':file', function() {
+          var input = $(this);
+          numFiles = input.get(0).files ? input.get(0).files.length : 1;
+          label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+          input.next(':text').val(label);
+          // input.next(':text').val(input.val());
+        });
+      })
+    </script>
+</head>
+<body>
+  <!-- Navigation -->
+  {% if False %}
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'deep_index' %}">Deep Image</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'deep_index' %}">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  {% endif %}
+
+  {% block page_content %}{% endblock %}
+
+  {% if False %}
+  <!-- Footer -->>
+  <footer class="navbar navbar-expand-lg navbar-dark bg-dark static-bottom">
+      <li class="navbar-brand">INSPIRED BY</li>
+  </footer>
+  {% endif %}
+</body>
+</html>

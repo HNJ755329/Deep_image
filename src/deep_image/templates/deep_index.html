@@ -1,0 +1,85 @@
+{% extends "base.html" %} 
+{% block title %}{{ block.super }}{% endblock title %}
+{% block page_content %}
+
+<div class="jumbotron text-center">
+   <h1><a href="{% url 'deep_index' %}">How CNN Model Works</a></h1>
+   <p>Understanding of Convolutional Neural Network (CNN) — Deep Learning</p> 
+</div>
+
+<div class="container">
+   <div class="row">
+      <div class="col-sm-4">
+         <h3>Classifications and Recognitions Images</h3>
+         <p>Convolutional Neural Network (CNN) is one of the most powerful Deep learning models of classifying and recognizing images.</p>
+      </div>
+      <div class="col-sm-4">
+         <h3>Visualize all hidden layers</h3>
+         <p>You know How CNN model works here.</p>
+         <p>You could use a pretrained CNN model easily with this app. We require a few clicks and upload your image.</p>
+      </div>
+      <div class="col-sm-4">
+         <h3>About us</h3>        
+         <p>We have a poor machine power. If you would like to use more smoothly, you should pull and build it on your local.</p>
+         <p>Here is github repository : <a href='https://github.com/HNJ755329/How_CNN_Works' target='_blank' class='font-weight-bold'>HOW CNN WORKS</a></p>
+      </div>
+   </div>
+   <h2>Overview for indivisual models</h2>
+   <div class="table-responsive">
+   <table class="table table-hover">
+      <thead>
+         <tr>
+            <th>Model</th>
+            <th>Top-1 Accuracy</th>
+            <th>Top-5 Accuracy</th>
+            <th>Parameters</th>
+            <th>Depth</th>
+         </tr>
+      </thead>
+      <tbody>
+      {% for cnn_model in cnn_models %}
+         <tr>
+            <td>{{ cnn_model.name }}</td>
+            <td>{{ cnn_model.Top1Accuracy }}</td>
+            <td>{{ cnn_model.Top5Accuracy }}</td>
+            <td>{{ cnn_model.Parameters }}</td>
+            <td>{{ cnn_model.Depth }}</td>
+         </tr>
+      {% endfor %}
+      </tbody>
+   </table>
+   </div>
+   <p>The top-1 and top-5 accuracy refers to the model's performance on the ImageNet validation dataset.
+      References : <a href='https://keras.io/applications/' target="_blank">keras Applications</a>
+   </p>
+
+   <form id='submit_model' class='form-inline center-block' action="{% url 'deep_model_submit' %}" method="POST">
+      <div class="form-group">
+      {% csrf_token %}
+      {{ model_form }}
+      </div>
+      <input type="submit" value="Submit Model" class="btn btn-primary"/>
+   </form>
+   <form id='submit_image' class='form-inline center-block' action="{% url 'deep_image_submit' %}" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+      {% csrf_token %}
+      {{ image_form }}
+      <input type="text" class="form-control" readonly="">
+      </div>
+      <input type="submit" value="Submit Image" class="btn btn-primary"/>
+   </form>
+   <h2>Uploaded image</h2>
+   <p>Display submits image.</p>
+   <div id="uploaded_image"></div>
+
+   <h2>Pretrained CNN Model to Tensorboard <span id='label_tensorboard' class='label label-info'></span></h2>
+   <p>You could see overview of submit CNN model.</p>
+   <div id='tensorboard'></div>
+   <h3>References</h3>
+   <div id='References'></div>
+
+   <h2>CNN Layers</h2>
+   <p>After submitting your image, click layer's name. You could see all CNN layers images and predictions.</p>
+   <div id="cnn_layers"></div>
+</div>
+{% endblock %}
