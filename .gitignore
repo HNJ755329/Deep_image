@@ -1,6 +1,7 @@
 # SQLdata and Upload images
 mysql/*
 src/media
+migrations/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
