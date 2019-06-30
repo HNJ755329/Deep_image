@@ -140,6 +140,20 @@
           var layer = layerimages.parent();
           layer.find('.altshow').text(layerimage.attr('alt'));
         });
+
+        $(document).on('click','.uploaded-img',function(){
+          var img = $(this);
+          IMAGE.url = img.attr('src');
+          $("#uploaded_image").html("<img class='upload_image center-block' src=" + "{% static 'deep_image/image/gif-load.gif' %}" + ">");
+          setTimeout(
+            function(){
+              $("#uploaded_image").html(
+                "<img class='img-responsive center-block' witdh='840' src=" + IMAGE.url + ">");
+            },
+            "1000"
+          );
+        });
+
         // image upload form //
         $(document).on('change', ':file', function() {
           var input = $(this);
@@ -191,7 +205,7 @@
     <h3>Recent Uploaded</h3>
     <div id='uploaded_image_thumbnail'>
     {% for img in images_saved %}
-      <img class='img-thumbnail' width="224" height="224" src="{{img.image.url}}" />
+      <img class='uploaded-img img-thumbnail' width="224" height="224" src="{{img.image.url}}" />
     {% endfor %}
     </div>
     <!-- Copyright -->

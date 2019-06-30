@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'deep_image',
     'django_static_md5url',
     'django_webtest',
-    'bootstrap_toolkit',
 ]
 
 MIDDLEWARE = [
