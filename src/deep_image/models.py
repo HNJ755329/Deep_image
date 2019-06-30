@@ -3,9 +3,10 @@ from django.db import models
 # Create your models here.
 class Photo(models.Model):
     image = models.ImageField(upload_to='upload_image')
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.image.url
+        return str(self.image.url) + ' uploaded : ' + str(self.date)
     
     class Meta:
         verbose_name_plural = "Uploaded images"

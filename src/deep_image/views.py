@@ -8,6 +8,7 @@ import json
 from .forms import PhotoForm
 from .forms import tfkerasModelForm
 from .main import MyModel
+from .models import Photo
 from .models import CnnModelTable
 from django.views.decorators.csrf import csrf_exempt
 
@@ -36,6 +37,7 @@ class deep_index(TemplateView):
         self.params['cnn_models']  = CnnModelTable.objects.all()
         self.params['model_form'] = tfkerasModelForm()
         self.params['image_form'] = PhotoForm()
+        self.params['images_saved'] = Photo.objects.all().order_by('date')[::-1][:5]
         return render(request, 'deep_index.html', self.params)
 
 class deep_model_submit(TemplateView):

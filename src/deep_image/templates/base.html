@@ -185,11 +185,23 @@
 
   {% block page_content %}{% endblock %}
 
-  {% if False %}
-  <!-- Footer -->>
-  <footer class="navbar navbar-expand-lg navbar-dark bg-dark static-bottom">
-      <li class="navbar-brand">INSPIRED BY</li>
+  {% if True %}
+  <!-- Footer -->
+  <footer class="jumbotron text-center">
+    <h3>Recent Uploaded</h3>
+    <div id='uploaded_image_thumbnail'>
+    {% for img in images_saved %}
+      <img class='img-thumbnail' width="224" height="224" src="{{img.image.url}}" />
+    {% endfor %}
+    </div>
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2019 Copyright:
+      <a href="{% url 'deep_index' %}"> HowCNNModel.work</a>
+    </div>
+    <!-- Copyright -->
+    
   </footer>
+  <!-- Footer -->
   {% endif %}
 </body>
 </html>
