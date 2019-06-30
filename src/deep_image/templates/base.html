@@ -29,7 +29,7 @@
           event.preventDefault();
           var form = $(this);
           var formData = new FormData(this);
-          IMAGE.model = formData.get('tfkerasModel');
+          IMAGE.model = formData.get('CNNModels');
           console.log(...formData.entries());
           $("#tensorboard").html("<img class='upload_image center-block' src=" + "{% static 'deep_image/image/gif-load.gif' %}" + ">");
           $("#References").html("<img class='upload_image center-block' src=" + "{% static 'deep_image/image/gif-load.gif' %}" + ">");
@@ -140,7 +140,7 @@
           var layer = layerimages.parent();
           layer.find('.altshow').text(layerimage.attr('alt'));
         });
-
+        // image upload form //
         $(document).on('change', ':file', function() {
           var input = $(this);
           numFiles = input.get(0).files ? input.get(0).files.length : 1;
@@ -156,7 +156,7 @@
   {% if False %}
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
     <div class="container">
-      <a class="navbar-brand" href="{% url 'deep_index' %}">Deep Image</a>
+      <a class="navbar-brand" href="{% url 'deep_index' %}">How CNN Model Works</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>

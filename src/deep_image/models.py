@@ -11,15 +11,6 @@ class Photo(models.Model):
     class Meta:
         verbose_name_plural = "Uploaded images"
 
-class LayerPhoto(models.Model):
-    layer_image = models.ImageField(upload_to='layer_image')
-
-    def __str__(self):
-        return self.image.url
-    
-    class Meta:
-        verbose_name_plural = "Layer images"
-
 class CnnModelTable(models.Model):
     name = models.CharField(max_length=30)
     Top1Accuracy = models.CharField(max_length=10)
@@ -32,7 +23,7 @@ class CnnModelTable(models.Model):
     class Meta:
         verbose_name_plural = "CNN MODELS"
 
-class tfkerasModel(models.Model):
+class CNNModels(models.Model):
     MODEL_CHOICES = (
         ('densenet', 'tf.keras.applications.densenet'),
         ('inception_resnet_v2', 'tf.keras.applications.inception_resnet_v2'),
@@ -46,7 +37,7 @@ class tfkerasModel(models.Model):
         ('xception', 'tf.keras.applications.xception'),
     )
 
-    tfkerasModel = models.CharField(max_length=1000, choices=MODEL_CHOICES)
+    CNNModels = models.CharField(max_length=1000, choices=MODEL_CHOICES)
     
     class Meta:
-        verbose_name_plural = "tfkerasModel"
+        verbose_name_plural = "CNNModelsChoice"

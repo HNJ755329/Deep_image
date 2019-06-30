@@ -1,6 +1,6 @@
 from django import forms
 from .models import Photo
-from .models import tfkerasModel
+from .models import CNNModels
 
 class PhotoForm(forms.ModelForm):
     class Meta:
@@ -19,17 +19,17 @@ class PhotoForm(forms.ModelForm):
             'class': 'form-control btn btn-default'
         }
 
-class tfkerasModelForm(forms.ModelForm):
+class CNNModelsForm(forms.ModelForm):
     class Meta:
-        model = tfkerasModel
-        fields = ('tfkerasModel',)
+        model = CNNModels
+        fields = ('CNNModels',)
         widgets = {
-            'tfkerasModel': forms.Select(attrs={
+            'CNNModels': forms.Select(attrs={
                 'class': "btn btn-default",
             })
         }
         labels = {
-            'tfkerasModel': 'Choose Model',
+            'CNNModels': 'Choose Model',
         }
         label_attrs = {
             'class': 'form-control btn btn-default'

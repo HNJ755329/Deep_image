@@ -6,7 +6,7 @@ from app.settings import BASE_DIR
 import json
 
 from .forms import PhotoForm
-from .forms import tfkerasModelForm
+from .forms import CNNModelsForm
 from .main import MyModel
 from .models import Photo
 from .models import CnnModelTable
@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from logging import getLogger, StreamHandler, DEBUG, ERROR
 logger = getLogger(__name__)
 handler = StreamHandler()
-handler.setLevel(DEBUG)
+handler.setLevel(ERROR)
 logger.setLevel(DEBUG)
 logger.addHandler(handler)
 logger.propagate = False
@@ -34,8 +34,8 @@ class deep_index(TemplateView):
                     }
     
     def get(self, request):
-        self.params['cnn_models']  = CnnModelTable.objects.all()
-        self.params['model_form'] = tfkerasModelForm()
+        self.params['cnn_model_table']  = CnnModelTable.objects.all()
+        self.params['model_form'] = CNNModelsForm()
         self.params['image_form'] = PhotoForm()
         self.params['images_saved'] = Photo.objects.all().order_by('date')[::-1][:5]
         return render(request, 'deep_index.html', self.params)
@@ -54,7 +54,7 @@ class deep_model_submit(TemplateView):
     def post(self, request):
         logger.debug('deep_model_submit:request.POST')
         logger.debug(request.POST)
-        model_name = request.POST['tfkerasModel']
+        model_name = request.POST['CNNModels']
         self.model = MyModel(model_name)
         self.params['model_name'] = model_name
         self.params['graph'] = self.model.get_graph()

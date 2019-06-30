@@ -16,7 +16,7 @@
       <div class="col-sm-4">
          <h3>Visualize all hidden layers</h3>
          <p>You know How CNN model works here.</p>
-         <p>You could use a pretrained CNN model easily with this app. We require a few clicks and upload your image.</p>
+         <p>You could use pretrained CNN models easily with this app. We require a few clicks and upload your image.</p>
       </div>
       <div class="col-sm-4">
          <h3>About us</h3>        
@@ -37,7 +37,7 @@
          </tr>
       </thead>
       <tbody>
-      {% for cnn_model in cnn_models %}
+      {% for cnn_model in cnn_model_table %}
          <tr>
             <td>{{ cnn_model.name }}</td>
             <td>{{ cnn_model.Top1Accuracy }}</td>
