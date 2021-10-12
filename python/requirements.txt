@@ -5,7 +5,7 @@ IPython==7.5.0
 uwsgi==2.0.18
 PyMySQL==0.9.3
 pylint==2.3.1
-opencv-python==4.1.0.25
+opencv-python==4.2.0.32
 Pillow==6.0.0
 tensorflow==1.14.0
 tensorflow-gpu==1.14.0
